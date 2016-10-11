@@ -1,5 +1,7 @@
 # Git Initial Guide for this repo
 
+### Clone the repo
+
  - 1. 
 Went to the local folder you want this repo be cloned into in the terminal, and type following command line to clone the repo 
 
@@ -34,4 +36,14 @@ Switched to a new branch 'sound'
 git status
 ````  
 The terminal should tell you you are on branch crawling or branch sound.
+
+### Commit & Push
+
+ - 1. After editing files locally, use followlng command to add these changes and push them to the origin team branch(crawling or sound branch)
+````
+git add .
+git commit -m"commit message"
+git push origin [branch name]
+
+````
 
