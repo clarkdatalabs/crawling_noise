@@ -2,14 +2,14 @@
 
 ### Clone the repo
 
- - 1. 
-Went to the local folder you want this repo be cloned into in the terminal, and type following command line to clone the repo 
+ - 1.
+Went to the local folder you want this repo be cloned into in the terminal, and type following command line to clone the repo
 
 ````
 git clone https://github.com/clarkdatalabs/crawling_noise.git  
 ````
 
- - 2. 
+ - 2.
  For team crawling, you could type the following command into the terminal
 ````
 git checkout crawling
@@ -23,15 +23,15 @@ Switched to a new branch 'crawling'
 ````
 git checkuot sound
 ````
-you should see this message pops up 
+you should see this message pops up
 ````
 Branch sound set up to track remote branch sound from origin.
 Switched to a new branch 'sound'
 ````
 
- - 3. 
+ - 3.
   Now each team should have two local branches, the master branch and the branch you would work on(branch sound or branch crawling)
-  For this project, we are all going to work on our team branch, that means, whenever you type this command in the terminal 
+  For this project, we are all going to work on our team branch, that means, whenever you type this command in the terminal
 ````
 git status
 ````  
@@ -46,4 +46,12 @@ git commit -m"commit message"
 git push origin [branch name]
 
 ````
+### Pull & Update your branch
+ - Remember to update your branch with the latest master branch every time before you start working on your team branch
+````
+git checkout master
+git pull
+git checkout [branch name]
+git merge master
 
+````
