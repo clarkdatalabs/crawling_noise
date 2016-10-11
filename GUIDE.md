@@ -1,0 +1,49 @@
+# Git Initial Guide for this repo
+
+### Clone the repo
+
+ - 1. 
+Went to the local folder you want this repo be cloned into in the terminal, and type following command line to clone the repo 
+
+````
+git clone https://github.com/clarkdatalabs/crawling_noise.git  
+````
+
+ - 2. 
+ For team crawling, you could type the following command into the terminal
+````
+git checkout crawling
+````
+then you should see the followling lines printing out in your terminal, that means you created a locla brach named 'crawling', and it is automatically updated with the remote branch 'crawling'
+````
+Branch crawling set up to track remote branch crawling from origin.
+Switched to a new branch 'crawling'
+````
+ For team sound, you could type the following command into the terminal
+````
+git checkuot sound
+````
+you should see this message pops up 
+````
+Branch sound set up to track remote branch sound from origin.
+Switched to a new branch 'sound'
+````
+
+ - 3. 
+  Now each team should have two local branches, the master branch and the branch you would work on(branch sound or branch crawling)
+  For this project, we are all going to work on our team branch, that means, whenever you type this command in the terminal 
+````
+git status
+````  
+The terminal should tell you you are on branch crawling or branch sound.
+
+### Commit & Push
+
+ - 1. After editing files locally, use followlng command to add these changes and push them to the origin team branch(crawling or sound branch)
+````
+git add .
+git commit -m"commit message"
+git push origin [branch name]
+
+````
+
