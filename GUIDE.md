@@ -14,7 +14,7 @@ git clone https://github.com/clarkdatalabs/crawling_noise.git
 ````
 git checkout crawling
 ````
-then you should see the followling lines printing out in your terminal, that means you created a locla brach named 'crawling', and it is automatically updated with the remote branch 'crawling'
+then you should see the following lines printing out in your terminal, that means you created a local brach named 'crawling', and it is automatically updated with the remote branch 'crawling'
 ````
 Branch crawling set up to track remote branch crawling from origin.
 Switched to a new branch 'crawling'
@@ -31,15 +31,14 @@ Switched to a new branch 'sound'
 
  - 3.
   Now each team should have two local branches, the master branch and the branch you would work on(branch sound or branch crawling)
-  For this project, we are all going to work on our team branch, that means, whenever you type this command in the terminal
+  For this project, we are all going to work on our team branch(branch crawling or sound), you could use the following command to check whether you are on the right branch.
 ````
 git status
 ````  
-The terminal should tell you you are on branch crawling or branch sound.
 
 ### Commit & Push
 
- - 1. After editing files locally, use followlng command to add these changes and push them to the origin team branch(crawling or sound branch)
+ - 1. After editing files locally, use following command to add these changes and push them to the origin team branch(crawling or sound branch)
 ````
 git add .
 git commit -m"commit message"
