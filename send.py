@@ -29,7 +29,7 @@ while (1==1):
         c.send(oscmsg)
 
     except:
-        print "bad url:" + url
+        print "bad url :" + url
         url = stack[0]
         stack = stack[1:]
         continue
