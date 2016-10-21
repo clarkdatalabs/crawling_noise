@@ -18,6 +18,6 @@ o = OSCFunc({ arg msg, time, addr, recvPort; [msg, time, addr, recvPort].postln;
 // s.boot;
 // o.free;
 // s.quit;
-// To-do - 1) listen for rare events as well, and upon hearing one, generate diatonic chords using [index, index +2, index + 4] and/or [index, index + 2, index + 4, index + 6] using a different synth
+// to-do - 1) listen for rare events as well, and upon hearing one, generate diatonic chords using [index, index +2, index + 4] and/or [index, index + 2, index + 4, index + 6] using a different synth
 
 
