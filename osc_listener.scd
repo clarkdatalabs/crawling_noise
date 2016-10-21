@@ -1,15 +1,21 @@
-SynthDef(\smooth, { |freq = 440, sustain = 1, amp = 0.5|
+// this
+
+var minor, starting_note;
+minor = List[0, 2, 3, 5, 7, 8, 10, 12, 14, 15, 17, 19, 20, 22, 24]; // natural minor
+starting_note = 55 // G minor
+SynthDef(\smooth, { |freq = 440, sustain = 1, amp = 0.4|
     var sig;
-	sig = PinkNoise.ar(0.5) * SinOsc.ar(freq, 0, amp) * EnvGen.kr(Env.linen(0.05, sustain, 0.1), doneAction: 2);
+	sig =  FSinOsc.ar(freq.midicps, 0, amp) * EnvGen.kr(Env.linen(0.4, sustain, 0.3), doneAction: 2);
+	m.add(freq);
     Out.ar(0, sig ! 2)
 }).add;
 
 n = NetAddr.new("127.0.0.1", nil);    // create the NetAddr
 // create the OSCresponderNode
-o = OSCFunc({ arg msg, time, addr, recvPort; [msg, time, addr, recvPort].postln; Synth(\smooth, [freq: msg[1]*4.5, sustain: msg[2]/5000]);}, '/startup', n);
+o = OSCFunc({ arg msg, time, addr, recvPort; [msg, time, addr, recvPort].postln; Synth(\smooth, [freq: starting_note + minor[(msg[1] % 15)], sustain: 0.5 + (msg[2] % 3) ]);}, '/startup', n);
 
-
-
-o.free;
+// s.boot;
+// o.free;
+// s.quit;
 
 
