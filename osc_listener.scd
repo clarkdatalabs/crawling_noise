@@ -9,7 +9,6 @@ n = NetAddr.new("127.0.0.1", nil);    // create the NetAddr
 o = OSCFunc({ arg msg, time, addr, recvPort; [msg, time, addr, recvPort].postln; Synth(\smooth, [freq: msg[1]*4.5, sustain: msg[2]/5000]);}, '/startup', n);
 
 
-
 o.free;
 
 
