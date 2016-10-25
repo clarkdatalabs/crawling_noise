@@ -1,9 +1,12 @@
-import pythonosc as OSC
+# import pythonosc as OSC
+import OSC
 import urllib2
 from bs4 import BeautifulSoup
-import re
-from random import randint
 from urlparse import urljoin
+
+#import re                           #not currently using Regular Expressions
+#from random import randint          #not currently using randint
+
 
 url = "http://www.umich.edu"
 stack = []
@@ -28,7 +31,7 @@ while (1 == 1):
         c = OSC.OSCClient()
         c.connect(('127.0.0.1', 57120))  # connect to SuperCollider
         oscmsg = OSC.OSCMessage()
-        oscmsg.setAddress("/startup")  # the name of the channel  ///once exhaustting a page, send a new page event
+        oscmsg.setAddress("/startup")  # the name of the channel  ///once exhausting a page, send a new page event
         oscmsg.append(len(links))
         oscmsg.append(f.headers["Content-Length"])  ## size of the file
         oscmsg.append(len(divs))
