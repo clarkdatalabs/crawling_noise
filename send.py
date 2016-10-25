@@ -20,13 +20,13 @@ while (1 == 1):
             if href.startswith("http:") and href not in visted:
                 print href
                 stack.append(href)
-            elif href.startswith("/") and href not in visted:
-                match = re.search(r'/(.+)', href)
-                relativehref = match.group(1)
-                if relativehref:
-
-                    path = url + "/"+relativehref
-                    stack.append(path)
+            # elif href.startswith("/") and href not in visted:
+            #     match = re.search(r'/(.+)', href)
+            #     relativehref = match.group(1)
+            #     if relativehref:
+            #
+            #         path = url + "/"+relativehref
+            #         stack.append(path)
 
         visted.append(url)  ### get some information of the color
         c = OSC.OSCClient()
