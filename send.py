@@ -3,10 +3,16 @@ import OSC
 import urllib2
 from bs4 import BeautifulSoup
 from urlparse import urljoin
+import re
 
-#import re                           #not currently using Regular Expressions
-#from random import randint          #not currently using randint
 
+def TLDcode(url):   #checks Top Level Domain. .edu -->0, .com -->1, <anything else> --> 2
+    if re.search('\.edu/|\.edu$',url):
+        return 0                            #returns 0 for .edu or .edu/... endings
+    elif  re.search('\.com/|\.com$',url):
+        return 1                            #returns 1 for .com or .com/... endings
+    else:                                       
+        return 2                            #returns 2 for everything else
 
 url = "http://www.umich.edu"
 stack = []
@@ -25,7 +31,7 @@ while (1 == 1):
                 stack.append(href)
             elif href.startswith("/") and href not in visted:
                 joinurl = urljoin(url, href)
-                stack.append(joinurl)
+                stack.append(joinurl)                
 
         visted.append(url)  ### get some information of the color
         c = OSC.OSCClient()
