@@ -3,6 +3,7 @@ import urllib2
 from bs4 import BeautifulSoup
 import re
 from random import randint
+from urlparse import urljoin
 
 url = "http://www.umich.edu"
 stack = []
@@ -18,15 +19,10 @@ while (1 == 1):
         for link in links:
             href = link.get('href')
             if href.startswith("http:") and href not in visted:
-                print href
                 stack.append(href)
-            # elif href.startswith("/") and href not in visted:
-            #     match = re.search(r'/(.+)', href)
-            #     relativehref = match.group(1)
-            #     if relativehref:
-            #
-            #         path = url + "/"+relativehref
-            #         stack.append(path)
+            elif href.startswith("/") and href not in visted:
+                joinurl = urljoin(url, href)
+                stack.append(joinurl)
 
         visted.append(url)  ### get some information of the color
         c = OSC.OSCClient()
