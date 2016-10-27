@@ -1,5 +1,5 @@
-# import pythonosc as OSC
-import OSC
+import pythonosc as OSC
+# import OSC
 import urllib2
 from bs4 import BeautifulSoup
 from urlparse import urljoin
@@ -27,11 +27,9 @@ while (1 == 1):
         divs = soup.find_all('div')
         for link in links:
             href = link.get('href')
-            if href.startswith("http:") and href not in visted:
-                stack.append(href)
-            elif href.startswith("/") and href not in visted:
-                joinurl = urljoin(url, href)
-                stack.append(joinurl)                
+            joinurl = urljoin(url, href)
+            if joinurl.startswith("http:") and joinurl not in visted:
+                stack.append(joinurl)
 
         visted.append(url)  ### get some information of the color
         c = OSC.OSCClient()
