@@ -31,9 +31,10 @@ while (1 == 1):
             joinurl = urljoin(url, href)
             if joinurl.startswith("http") and joinurl not in visted:
                 stack.append(joinurl) 
+                visted.append(joinurl)
         stack.append("newpage")       #once all links are added, insert a <newpage> counter into the stack
 
-        visted.append(url)  ### get some information of the color
+
         c = OSC.OSCClient()
         c.connect(('127.0.0.1', 57120))  # connect to SuperCollider
         oscmsg = OSC.OSCMessage()
