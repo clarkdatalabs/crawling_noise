@@ -6,8 +6,7 @@ major = List[0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24]; // major sca
 starting_note = 55; // G below middle C
 SynthDef(\smooth, { |freq = 440, sustain = 1, amp = 0.4|
     var sig;
-	sig =  FSinOsc.ar([freq.midicps, (freq+4).midicps, (freq+7).midicps], 0, amp) * FSinOsc.ar((freq-12).midicps, 0, (amp/8)) * EnvGen.kr(Env.linen(0.4, sustain, 0.3), doneAction: 2);
-	// sorry right now this is a weird froggy chord sound! still in progress
+	sig =  FSinOsc.ar([freq.midicps], 0, amp) * FSinOsc.ar((freq-12).midicps, 0, (amp/8)) * EnvGen.kr(Env.linen(0.4, sustain, 0.3), doneAction: 2);
 	m.add(freq);
     Out.ar(0, sig ! 2)
 }).add;
@@ -15,7 +14,9 @@ SynthDef(\smooth, { |freq = 440, sustain = 1, amp = 0.4|
 n = NetAddr.new("127.0.0.1", nil);    // create the NetAddr
 // create the OSCresponderNode
 
-o = OSCFunc({ arg msg, time, addr, recvPort; [msg, time, addr, recvPort].postln; Synth(\smooth, [freq: starting_note + minor[(msg[1] % 15)], sustain: 0.5 + (msg[2] % 3) ]);}, '/startup', n);
+o = OSCFunc({ arg msg, time, addr, recvPort; [msg, time, addr, recvPort].postln; Synth(\smooth, [freq: starting_note + minor[(msg[1] % 15)], sustain: 1.5 + (msg[2] % 3) ]); Synth(\smooth, [freq: starting_note + minor[(msg[1] % 15) + 2], sustain: 1.5 + (msg[2] % 3)]);  Synth(\smooth, [freq: starting_note + minor[(msg[1] % 15) + 4], sustain: 1.5 + (msg[2] % 3)]);  }, '/startup', n);
+// instead of trying to make chords within a given synth, forming chords using three different instances of synth \smooth. much less froggy!
+
 
 // s.boot;
 // o.free;
