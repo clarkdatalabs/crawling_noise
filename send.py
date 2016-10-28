@@ -1,5 +1,5 @@
-import pythonosc as OSC
-# import OSC
+#import pythonosc as OSC
+import OSC
 import urllib2
 from bs4 import BeautifulSoup
 from urlparse import urljoin
@@ -19,6 +19,7 @@ stack = []
 visted = []
 
 while (1 == 1):
+    
     try:
         f = urllib2.urlopen(url)
 
@@ -28,8 +29,9 @@ while (1 == 1):
         for link in links:
             href = link.get('href')
             joinurl = urljoin(url, href)
-            if joinurl.startswith("http:") and joinurl not in visted:
-                stack.append(joinurl)
+            if joinurl.startswith("http") and joinurl not in visted:
+                stack.append(joinurl) 
+        stack.append("newpage")       #once all links are added, insert a <newpage> counter into the stack
 
         visted.append(url)  ### get some information of the color
         c = OSC.OSCClient()
@@ -39,6 +41,7 @@ while (1 == 1):
         oscmsg.append(len(links))
         oscmsg.append(f.headers["Content-Length"])  ## size of the file
         oscmsg.append(len(divs))
+        oscmsg.append(TLDcode(url))     # Top Level Domain (.edu=0, .com=1, other=2)
         c.send(oscmsg)
 
     except:
@@ -47,7 +50,18 @@ while (1 == 1):
         stack = stack[1:]
         continue
 
-    print len(links)
-    url = stack[0]  ## whenever we go to the new page, send a message says new page.
+    url = stack[0]
+    if url == "newpage": ## whenever we go to the new page, send a message says new page.
+#         print "newpage"
+        stack = stack[1:]
+        url = stack[0]
+        
+        c = OSC.OSCClient()
+        c.connect(('127.0.0.1', 57120))  # connect to SuperCollider
+        oscmsg = OSC.OSCMessage()
+        oscmsg.setAddress("/newpage")  # the name of the channel
+        oscmsg.append(1)
+        c.send(oscmsg)
+
     stack = stack[1:]
-    print(url)
+
