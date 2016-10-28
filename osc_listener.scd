@@ -1,26 +1,49 @@
 // Generates notes within G natural minor
 
 var minor, major, starting_note;
-minor = List[0, 2, 3, 5, 7, 8, 10, 12, 14, 15, 17, 19, 20, 22, 24]; // natural minor scale for two octaves
+minor = List[0, 2, 3, 5, 7, 8, 10, 12, 14, 15, 17, 19, 20, 22, 24, 26, 27, 29, 31, 32, 34, 36]; // natural minor scale for two octaves
 major = List[0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24]; // major scale for two octaves
 starting_note = 55; // G below middle C
-SynthDef(\smooth, { |freq = 440, sustain = 1, amp = 0.4|
+SynthDef(\smooth, { |freq = 440, sustain = 3, amp = 0.3|
     var sig;
-	sig =  FSinOsc.ar([freq.midicps], 0, amp) * FSinOsc.ar((freq-12).midicps, 0, (amp/8)) * EnvGen.kr(Env.linen(0.4, sustain, 0.3), doneAction: 2);
+	sig =  FSinOsc.ar([freq.midicps], 0, amp) * FSinOsc.ar((freq+12).midicps, 0, (amp/8)) * EnvGen.kr(Env.linen(0.4, sustain, 1), doneAction: 2);
 	m.add(freq);
     Out.ar(0, sig ! 2)
 }).add;
 
+SynthDef(\chord1, { |freq = 440, sustain = 1, amp = 0.2|
+    var sig;
+	sig =  FSinOsc.ar([freq.midicps], 0, amp) * FSinOsc.ar((freq-12).midicps, 0, (amp/8)) * EnvGen.kr(Env.linen(0.2, sustain, 0.3), doneAction: 2);
+	m.add(freq);
+    Out.ar(1, sig ! 2)
+}).add;
+
+
 n = NetAddr.new("127.0.0.1", nil);    // create the NetAddr
 // create the OSCresponderNode
 
-o = OSCFunc({ arg msg, time, addr, recvPort; [msg, time, addr, recvPort].postln; Synth(\smooth, [freq: starting_note + minor[(msg[1] % 15)], sustain: 1.5 + (msg[2] % 3) ]); Synth(\smooth, [freq: starting_note + minor[(msg[1] % 15) + 2], sustain: 1.5 + (msg[2] % 3)]);  Synth(\smooth, [freq: starting_note + minor[(msg[1] % 15) + 4], sustain: 1.5 + (msg[2] % 3)]);  }, '/startup', n);
+o = OSCFunc({ arg msg, time, addr, recvPort; [msg, time, addr, recvPort].postln;
+		Synth(\smooth, [freq: starting_note + minor[(msg[1] % 15)], sustain: 3.5 + (msg[2] % 3) ]);
+	// always plays a melody note through \smooth synth
+	if(msg.notNil, {
+		Synth(\chord1, [freq: starting_note + minor[(msg[1] % 15)], sustain: 1.5 + (msg[2] % 3) ]);
+		Synth(\chord1, [freq: starting_note + minor[(msg[1] % 15) + 2], sustain: 1.5 + (msg[2] % 3)]);
+		Synth(\chord1, [freq: starting_note + minor[(msg[1] % 15) + 6], amp: 0.1, sustain: 1.5 + (msg[2] % 3)]); });
+	// creates a chord based on note + 3rd + 7th and plays through \chord1 synth
+	if(msg[4] > 0, {
+		Synth(\chord1, [freq: starting_note + minor[(msg[1] % 15) + 4], sustain: 1.5 + (msg[2] % 3)]); });
+	// when on not on a  dot com domain, adds the 5th to the chord
+}, '/startup', n);
+
 // instead of trying to make chords within a given synth, forming chords using three different instances of synth \smooth. much less froggy!
 
+// to get the server up and running, run s.boot and then the code snippet above
 
-// s.boot;
-// o.free;
-// s.quit;
+//s.boot;
+//o.free;
+//s.quit;
+
+
 // to-do - 1) listen for rare events as well, and upon hearing one, generate diatonic chords using [index, index +2, index + 4] and/or [index, index + 2, index + 4, index + 6] using a different synth
 
 
@@ -47,4 +70,3 @@ o = OSCFunc({ arg msg, time, addr, recvPort; [msg, time, addr, recvPort].postln;
 //3 % 2 -> 1
 //5 % 3 -> 2
 //MSG 21472194 % 15 - 0 and 14
-
