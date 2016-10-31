@@ -1,19 +1,21 @@
-#import pythonosc as OSC
+# import pythonosc as OSC
 import OSC
 import urllib2
 from bs4 import BeautifulSoup
 from urlparse import urljoin
 import re
-import sys
+from time import time
 
 
-def TLDcode(url):   #checks Top Level Domain. .edu -->0, .com -->1, <anything else> --> 2
-    if re.search('\.edu/|\.edu$',url):
-        return 0                            #returns 0 for .edu or .edu/... endings
-    elif  re.search('\.com/|\.com$',url):
-        return 1                            #returns 1 for .com or .com/... endings
+
+def TLDcode(url):  # checks Top Level Domain. .edu -->0, .com -->1, <anything else> --> 2
+    if re.search('\.edu/|\.edu$', url):
+        return 0  # returns 0 for .edu or .edu/... endings
+    elif re.search('\.com/|\.com$', url):
+        return 1  # returns 1 for .com or .com/... endings
     else:
-        return 2                            #returns 2 for everything else
+        return 2  # returns 2 for everything else
+
 
 url = "http://www.umich.edu"
 stack = []
@@ -41,8 +43,12 @@ while (1 == 1):
         if joinurl.startswith("http") and joinurl not in visted:
             stack.append(joinurl)
             visted.append(joinurl)
+            start_time = time()     # Measuring load time
+            jf = urllib2.urlopen(joinurl)
+            end_time = time()
+            jf.close()
+            print "Time to load: ", round(end_time - start_time)
     stack.append("newpage")       #once all links are added, insert a <newpage> counter into the stack
-
 
     c = OSC.OSCClient()
     c.connect(('127.0.0.1', 57120))  # connect to SuperCollider
