@@ -1,1 +1,7 @@
 We started working on a project to get our python scripting up to speed. We also wanted to make sure that everyone had the required repositories and libraries to work on future Visualization projects.
+
+What was done:
+
+1. Use a script to create a webcrawler
+2. The web crawler looks for all the links on a particular website and sends a message when all the links have been counted and then moves to the next link
+3. We sent this data to Super Collider which uses the input from the webcrawler and converts it into an audio file. The input we used is number of links that any webpage has. We can also use other criteria like background color of webpage, load time for a webpage
