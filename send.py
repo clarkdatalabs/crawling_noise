@@ -17,19 +17,21 @@ def TLDcode(url):  # checks Top Level Domain. .edu -->0, .com -->1, <anything el
         return 2  # returns 2 for everything else
 
 
-url = "http://www.umich.edu"
+url = "http://www.umich.edu" 
 stack = []
 visted = []
 
 while (1 == 1):
 
     try:
+        start_time = time()
         f = urllib2.urlopen(url)
+        total_time = round(time() - start_time)
 
         soup = BeautifulSoup(f, 'html.parser')
 
     except:
-        print "error:", sys.exc_info()[0]
+    #    print "error:", sys.exc_info()[0] #this doesn't work currently on my (Z.'s) Mac so commented out
         print "bad url:" + url
         url = stack[0]
         stack = stack[1:]
@@ -43,11 +45,10 @@ while (1 == 1):
         if joinurl.startswith("http") and joinurl not in visted:
             stack.append(joinurl)
             visted.append(joinurl)
-            start_time = time()     # Measuring load time
-            jf = urllib2.urlopen(joinurl)
-            end_time = time()
-            jf.close()
-            print "Time to load: ", round(end_time - start_time)
+#            start_time = time()     # Measuring load time
+#            jf = urllib2.urlopen(joinurl)
+#            end_time = time()
+#            jf.close()
     stack.append("newpage")       #once all links are added, insert a <newpage> counter into the stack
 
     c = OSC.OSCClient()
@@ -56,8 +57,9 @@ while (1 == 1):
     oscmsg.setAddress("/startup")  # the name of the channel  ///once exhausting a page, send a new page event
     oscmsg.append(len(links))
     oscmsg.append(f.read().__sizeof__())  ## size of the file
-    oscmsg.append(5)
+    oscmsg.append(len(divs))
     oscmsg.append(TLDcode(url))     # Top Level Domain (.edu=0, .com=1, other=2)
+    oscmsg.append(total_time) # One more message!
     c.send(oscmsg)
 
     print url
