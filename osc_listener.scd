@@ -1,8 +1,8 @@
 // Generates notes within G natural minor
 
 var minor, major, starting_note, max_links, max_divs, current_note, current_div_val, old_site_domain, links, size, divs_input, domain, input_time;
-minor = List[0, 2, 3, 5, 7, 8, 10, 12, 14, 15, 17, 19, 20, 22, 24, 26, 27, 29, 31, 32, 34, 36]; // natural minor scale for two octaves
-major = List[0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24, 26, 28, 29, 31, 33, 35, 36]; // major scale for two octaves ,not currently used
+minor = List[0, 2, 3, 5, 7, 8, 10, 12, 14, 15, 17, 19, 20, 22, 24, 26, 27, 29, 31, 32, 34, 36, 38, 39]; // natural minor scale for two octaves
+major = List[0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24, 26, 28, 29, 31, 33, 35, 36, 38, 40]; // major scale for two octaves ,not currently used
 starting_note = 43; // G below middle C
 max_links = 100; // starting value for max # of links on web crawled pages
 max_divs = 50; // starting value for max # of divs on web crawled pages
@@ -56,7 +56,7 @@ o = OSCFunc({ arg msg, time, addr, recvPort; [msg, time, addr, recvPort].postln;
 			if(current_div_val == 1, {  // plays major chord first inversion if # of divs in middle 3rd of range
 				Synth(\chord1, [freq: starting_note + minor[current_note], sustain: 0.2 + input_time]);
 				Synth(\chord1, [freq: starting_note + minor[current_note + 5], sustain: 0.2 + input_time]);
-				Synth(\chord1, [freq: starting_note + minor[current_note + 7], amp: 0.1,  sustain: 0.2 + input_time]);});
+				Synth(\chord1, [freq: starting_note + minor[current_note + 9], amp: 0.1,  sustain: 0.2 + input_time]);});
 
 			if(current_div_val == 2, { // plays major chord second inversion if # of divs in upper 3rd of range
 				Synth(\chord1, [freq: starting_note + minor[current_note], sustain: 0.2 + input_time]);
