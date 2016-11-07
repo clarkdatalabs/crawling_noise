@@ -2,14 +2,14 @@
 #import OSC
 import urllib2
 from bs4 import BeautifulSoup
-from urlparse import urljoin
+import urlparse
 import re
 import sys
 
 
 
 
-url = "http://www.umich.edu"
+url = "http://lsa.umich.edu"
 stack = []
 visted = []
 file = open("newfile.txt", "w")
@@ -31,8 +31,8 @@ while (1 == 1):
     links = soup.find_all('a', href=True)
     for link in links:
         href = link.get('href')
-        joinurl = urljoin(url, href)
-        if ("umich.edu" in joinurl):
+        joinurl = urlparse.urljoin(url, urlparse.urlparse(href).path)
+        if ("lsa.umich.edu" in joinurl):
             file.write(url + "|" + joinurl +"\n")
 
             #print url + "|" + joinurl
