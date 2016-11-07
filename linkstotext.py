@@ -9,7 +9,7 @@ import sys
 
 
 
-url = "http://lsa.umich.edu"
+url = "http://rackham.umich.edu"
 stack = []
 visted = []
 file = open("newfile.txt", "w")
@@ -32,8 +32,10 @@ while (1 == 1):
     for link in links:
         href = link.get('href')
         joinurl = urlparse.urljoin(url, urlparse.urlparse(href).path)
-        if ("lsa.umich.edu" in joinurl):
-            file.write(url + "|" + joinurl +"\n")
+        if ("rackham.umich.edu" in joinurl):
+            #file.write(url + "|" + joinurl +"\n")
+            textURL = url + "|" + joinurl +"\n"
+            file.write(textURL.encode("utf-8")) # to code in unicode over ASCII
 
             #print url + "|" + joinurl
             if joinurl not in visted:
