@@ -16,14 +16,12 @@ con = lite.connect('crawl.db') # created crawl.db directly with sqllite in termi
 con.text_factory = str # to prevent possible issue passing 8-bit unicode data
 
 with con:
+    cur = con.cursor()
+    cur.execute("DROP TABLE IF EXISTS Links") #overwrites any current table. This should be excluded if we end up adding "picking up where you left off" behavior
+    cur.execute("CREATE TABLE Links(Id INT, URL TEXT, JoinURL TEXT)")
+    idcounter = 1
+    
     while 1 == 1:
-
-
-        cur = con.cursor()
-        cur.execute("DROP TABLE IF EXISTS Links") #overwrites any current table. This should be excluded if we end up adding "picking up where you left off" behavior
-        cur.execute("CREATE TABLE Links(Id INT, URL TEXT, JoinURL TEXT)")
-        idcounter = 1
-
 
         try:
             f = urllib2.urlopen(url)
@@ -44,7 +42,7 @@ with con:
             if ("rackham.umich.edu" in joinurl):
                 url = url.encode("utf-8")
                 joinurl = joinurl.encode("utf-8")
-                cur.execute("INSERT INTO Links VALUES(?, ?, ?)", (idcounter, url, joinurl))
+                cur.execute("INSERT INTO Links VALUES (?, ?, ?)", (idcounter, url, joinurl))
                 idcounter += 1
                 print str(url + " | " + joinurl)
 
