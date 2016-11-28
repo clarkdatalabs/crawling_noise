@@ -1,0 +1,70 @@
+# import pythonosc as OSC
+# import OSC
+import urllib2
+from bs4 import BeautifulSoup
+import urlparse
+import re
+import sys
+import sqlite3 as lite
+
+url = "http://rackham.umich.edu"
+stack = []
+visted = []
+con1 = lite.connect('stack.db')
+con2 = lite.connect('visited.db') # created stack and visited db directly with sqllite in terminal via the command $ sqlite3 crawl.db
+con1.text_factory = str  # to prevent possible issue passing 8-bit unicode data
+con2.text_factory = str  # to prevent possible issue passing 8-bit unicode data
+
+with con1 and con2:
+    cur1 = con1.cursor()
+    cur1.execute(
+        "DROP TABLE IF EXISTS Links_Stack")  # overwrites any current table. This should be excluded if we end up adding "picking up where you left off" behavior
+    cur1.execute("CREATE TABLE Links_Stack(Id INT, JoinURL TEXT)")
+    idcounter = 1
+
+    cur2 = con2.cursor()
+    cur2.execute(
+        "DROP TABLE IF EXISTS Visited_Stack")  # overwrites any current table. This should be excluded if we end up adding "picking up where you left off" behavior
+    cur2.execute("CREATE TABLE Visited_Stack(Id INT, JoinURL TEXT)")
+    idcounter = 1
+
+    while 1 == 1:
+
+        try:
+            f = urllib2.urlopen(url)
+            soup = BeautifulSoup(f, 'html.parser')
+
+        except:
+            # print "error:", sys.exc_info()[0] #this doesn't work currently on my (Z.'s) Mac so commented out
+            print "bad url:"
+            print url
+            url = cur1.execute("SELECT JoinURL FROM Links_Stack LIMIT 1")
+            id = cur1.execute("SELECT Id FROM Links_Stack LIMIT 1")
+            cur1.execute("DELETE FROM Links_Stack WHERE Id = ?", id)
+            continue
+
+        links = soup.find_all('a', href=True)
+        for link in links:
+            href = link.get('href')
+            joinurl = urlparse.urljoin(url, urlparse.urlparse(href).path)
+            if ("rackham.umich.edu" in joinurl):
+                joinurl = joinurl.encode("utf-8")
+                idcounter += 1
+                #print str(url + " | " + joinurl)
+                cur2.execute("SELECT JoinURL from Visited_Stack WHERE JoinURL = ?", (joinurl,))
+                if not cur2.fetchall():
+                    #stack.append(joinurl)
+                    #visted.append(joinurl)
+                    cur1.execute("INSERT INTO Links_Stack(Id, JoinURL) VALUES ( ?, ?)", (idcounter, joinurl))
+                    con1.commit()
+                    cur2.execute("INSERT INTO Visited_Stack(Id, JoinURL) VALUES ( ?, ?)",
+                                 (idcounter, joinurl))
+                    con2.commit()
+
+        print url + "   links in stack:"
+        print (str(cur1.execute("SELECT COUNT(*) FROM Links_Stack")))
+
+        url = cur1.execute("SELECT * FROM Links_Stack LIMIT 1")
+        id = cur1.execute("SELECT Id FROM Links_Stack LIMIT 1")
+        #print id
+        cur1.execute("DELETE FROM Links_Stack WHERE Id = ?", (id,))
