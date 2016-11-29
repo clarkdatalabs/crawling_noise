@@ -12,10 +12,12 @@ stack = []
 visted = []
 con1 = lite.connect('stack.db')
 con2 = lite.connect('visited.db') # created stack and visited db directly with sqllite in terminal via the command $ sqlite3 crawl.db
+con3 = lite.connect('links.db')
 con1.text_factory = str  # to prevent possible issue passing 8-bit unicode data
 con2.text_factory = str  # to prevent possible issue passing 8-bit unicode data
+con3.text_factory = str # to prevent possible issue passing 8-bit unicode data
 
-with con1 and con2:
+with con1 and con2 and con3:
     cur1 = con1.cursor()
     cur1.execute(
         "DROP TABLE IF EXISTS Links_Stack")  # overwrites any current table. This should be excluded if we end up adding "picking up where you left off" behavior
@@ -28,6 +30,12 @@ with con1 and con2:
     cur2.execute("CREATE TABLE Visited_Stack(Id INT, JoinURL TEXT)")
     idcounter = 1
 
+    cur3 = con3.cursor()
+    cur3.execute(
+        "DROP TABLE IF EXISTS All_Links")  # overwrites any current table. This should be excluded if we end up adding "picking up where you left off" behavior
+    cur3.execute("CREATE TABLE All_Links(Id INT, All_URL TEXT)")
+    idcounter = 1
+
     while 1 == 1:
 
         try:
@@ -38,9 +46,11 @@ with con1 and con2:
             # print "error:", sys.exc_info()[0] #this doesn't work currently on my (Z.'s) Mac so commented out
             print "bad url:"
             print url
-            url = cur1.execute("SELECT JoinURL FROM Links_Stack LIMIT 1")
-            id = cur1.execute("SELECT Id FROM Links_Stack LIMIT 1")
-            cur1.execute("DELETE FROM Links_Stack WHERE Id = ?", id)
+            cur1.execute("SELECT * FROM Links_Stack LIMIT 1")
+            url = data[1]
+            id = data[0]
+            cur1.execute("DELETE FROM Links_Stack WHERE Id = ?", (id,))
+            con1.commit()
             continue
 
         links = soup.find_all('a', href=True)
@@ -50,7 +60,10 @@ with con1 and con2:
             if ("rackham.umich.edu" in joinurl):
                 joinurl = joinurl.encode("utf-8")
                 idcounter += 1
-                #print str(url + " | " + joinurl)
+                joined_URL = str(url + " | " + joinurl)
+                print joined_URL
+                cur3.execute("INSERT INTO All_Links(Id, All_URL) VALUES ( ?, ?)", (idcounter, joined_URL))
+                con3.commit()
                 cur2.execute("SELECT JoinURL from Visited_Stack WHERE JoinURL = ?", (joinurl,))
                 if not cur2.fetchall():
                     #stack.append(joinurl)
@@ -61,10 +74,16 @@ with con1 and con2:
                                  (idcounter, joinurl))
                     con2.commit()
 
-        print url + "   links in stack:"
-        print (str(cur1.execute("SELECT COUNT(*) FROM Links_Stack")))
+        #print url + "   links in stack:"
+        #print (str(cur1.execute("SELECT COUNT(*) FROM Links_Stack")))
 
-        url = cur1.execute("SELECT * FROM Links_Stack LIMIT 1")
-        id = cur1.execute("SELECT Id FROM Links_Stack LIMIT 1")
+        cur1.execute("SELECT * FROM Links_Stack LIMIT 1")
+        #print id
+        data = cur1.fetchone()
+        url = data[1]
+        id = data[0]
         #print id
         cur1.execute("DELETE FROM Links_Stack WHERE Id = ?", (id,))
+        con1.commit()
+
+
