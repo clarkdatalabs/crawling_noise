@@ -36,15 +36,19 @@ while 1 == 1:
         joinurl = urlparse.urljoin(url, urlparse.urlparse(href).path)
         if ("ai.umich.edu" in joinurl):
             url = url.encode("utf-8")
+            if (url[-1] == '/'):
+                url = url[:-1]
             joinurl = joinurl.encode("utf-8")
+            if (joinurl[-1] == '/'):
+                joinurl = joinurl[:-1]
 
-            #get a count of rows invisted
-            inVisted = cur.execute("SELECT COUNT(*) FROM visited WHERE JoinURL = ?", (joinurl,)).fetchone()[0]
-            cur.execute("INSERT INTO output('fromURL', 'toURL') VALUES (?, ?)", (url, joinurl))
-            if inVisted==0:
-                cur.execute("INSERT INTO stack('URL', 'JoinURL') VALUES (?, ?)", (url, joinurl))
-                cur.execute("INSERT INTO visited('URL', 'JoinURL') VALUES (?, ?)", (url, joinurl))
-                con.commit()
+                #get a count of rows invisted
+                inVisted = cur.execute("SELECT COUNT(*) FROM visited WHERE JoinURL = ?", (joinurl,)).fetchone()[0]
+                cur.execute("INSERT INTO output('fromURL', 'toURL') VALUES (?, ?)", (url, joinurl))
+                if inVisted==0:
+                    cur.execute("INSERT INTO stack('URL', 'JoinURL') VALUES (?, ?)", (url, joinurl))
+                    cur.execute("INSERT INTO visited('URL', 'JoinURL') VALUES (?, ?)", (url, joinurl))
+                    con.commit()
 
 
     print url + "   links in stack:" + str(cur.execute("SELECT COUNT(*) FROM stack").fetchone()[0])
