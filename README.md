@@ -1,6 +1,5 @@
 # [crawling_noise](https://github.com/clarkdatalabs/crawling_noise)
-
-Summary: Using the free and open-source SuperCollider software, this project generated music from web crawling information.
+*Using the free and open-source SuperCollider software, this project generated music from web crawling information.*
 
 "SuperCollider is free and open-source software that allows users to generate audio programmatically, including from messages sent over a local server. In our first project as data visualization interns, we used Python to crawl the web and collect parameters, which we passed to SuperCollider to generate music.
 
