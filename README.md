@@ -1,4 +1,4 @@
-[![alt text](images/crawlingsample.png)](https://digitalprojectstudio.wordpress.com/2016/11/11/listening-to-the-web-crawl-making-music-out-of-web-crawling-data-using-supercollider/)
+[![Photo of web crawling sound outputs on Soundcloud, with link to blog post](images/crawlingsample.png)](https://digitalprojectstudio.wordpress.com/2016/11/11/listening-to-the-web-crawl-making-music-out-of-web-crawling-data-using-supercollider/)
 
 
 "SuperCollider is free and open-source software that allows users to generate audio programmatically, including from messages sent over a local server. In our first project as data visualization interns, we used Python to crawl the web and collect parameters, which we passed to SuperCollider to generate music.
